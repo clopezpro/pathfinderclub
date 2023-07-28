@@ -3,21 +3,21 @@ import '@unocss/reset/tailwind.css'
 
 useHead({
   htmlAttrs: {
-    lang: 'en',
+    lang: 'es',
   },
   charset: 'utf-8',
-  title: 'Nuxt Movies',
-  titleTemplate: title => title !== 'Nuxt Movies' ? `${title} · Nuxt Movies` : title,
+  title: 'Club Abisai',
+  titleTemplate: title => title !== 'Club Abisai' ? `${title} · Club Abisai` : title,
   meta: [
-    { name: 'description', content: 'A TMDB client built with Nuxt Image to show the potential of it ✨' },
-    { property: 'og:image', content: 'https://movies.nuxt.space/social-card.png' },
+    { name: 'description', content: 'Una aplicacion del club de conquistadores Abisai de la Iglesia Realiad de Dios de Monte Sinai en Guayaquil' },
+    { property: 'og:image', content: '/cub_abisai.jpeg' },
     { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:site', content: '@nuxt_js' },
-    { name: 'twitter:creator', content: '@nuxt_js' },
+    { name: 'twitter:site', content: '@dev_clopez' },
+    { name: 'twitter:creator', content: '@dev_clopez' },
   ],
   link: [
     {
-      rel: 'icon', type: 'image/webp', href: '/movies.webp',
+      rel: 'icon', type: 'image/webp', href: '/cub_abisai.webp',
     },
   ],
 })
@@ -26,16 +26,13 @@ useHead({
 <template>
   <NuxtLoadingIndicator />
   <div
-    h-full w-full font-sans
-    grid="~ lt-lg:rows-[1fr_max-content] lg:cols-[max-content_1fr]"
-    of-hidden view-transition-app transition duration-0
+    h-full w-full font-sans view-transition-app transition duration-0
   >
-    <div id="app-scroller" of-x-hidden of-y-auto relative>
+    <div id="app-scroller">
+      <alertModal />
+
       <NuxtPage />
     </div>
-    <NavBar lg:order-first />
-    <IframeModal />
-    <PhotoModal />
   </div>
 </template>
 

@@ -1,8 +1,5 @@
-import LANGUAGES from '~/constants/languages'
-
 export function formatDate(string: string) {
-  const locale = useNuxtApp().$i18n.locale
-  const date = new Date(string).toLocaleDateString(unref(locale))
+  const date = new Date(string).toLocaleDateString('ec-EC')
   return date
 }
 
@@ -27,15 +24,6 @@ export function formatTime(minutes: number) {
 
 export function numberWithCommas(number: number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}
-
-export function formatLang(iso: string) {
-  const fullLang = LANGUAGES.find(lang => lang.iso_639_1 === iso)
-
-  if (fullLang)
-    return fullLang.english_name
-
-  return iso
 }
 
 export function useSingleton<T>() {

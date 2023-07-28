@@ -5,89 +5,40 @@ const apiBaseUrl = 'https://movies-proxy.vercel.app'
 
 export default defineNuxtConfig({
   modules: [
+    '@nuxthq/ui',
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
-    '@nuxt/image-edge',
-    '@nuxtjs/i18n',
+    '@vee-validate/nuxt',
   ],
   experimental: {
     inlineSSRStyles: false,
     viewTransition: true,
     renderJsonPayloads: true,
   },
-  routeRules: {
-    '/**': isDev ? {} : { cache: { swr: true, maxAge: 120, staleMaxAge: 60, headersOnly: true } },
-  },
   runtimeConfig: {
     public: {
       apiBaseUrl,
+      NAMESYSTEM: process.env.NAMESYSTEM,
     },
+    mongo: {
+      IP: process.env.MONGO_IP,
+      DB: process.env.MONGO_DB_NAME,
+      PORT: process.env.MONGO_PORT,
+      USER: process.env.MONGO_USER,
+      PASS: process.env.MONGO_PASS,
+    },
+    KEY_GPT: process.env.KEY_GPT,
+    SEED: process.env.SEED,
+    PASS_TOKEN: process.env.PASS_TOKEN,
+    NODE_ENV: process.env.NODE_ENV,
   },
   devtools: {
     enabled: true,
-  },
-  image: {
-    provider: 'proxy',
-    providers: {
-      proxy: {
-        provider: 'ipx',
-        options: {
-          baseURL: `${apiBaseUrl}/ipx`,
-        },
-      },
-    },
   },
   nitro: {
     routeRules: {
       '/**': { isr: false },
     },
-  },
-  i18n: {
-    detectBrowserLanguage: {
-      useCookie: true,
-      fallbackLocale: 'en',
-    },
-    strategy: 'no_prefix',
-    locales: [
-      {
-        code: 'en',
-        name: 'English',
-        file: 'en.json',
-      },
-      {
-        code: 'de-DE',
-        name: 'Deutsch',
-        file: 'de-DE.json',
-      },
-      {
-        code: 'es-ES',
-        name: 'Español',
-        file: 'es-ES.json',
-      },
-      {
-        code: 'ja',
-        name: '日本語',
-        file: 'ja.json',
-      },
-      {
-        code: 'zh-CN',
-        name: '简体中文',
-        file: 'zh-CN.json',
-      },
-      {
-        code: 'pt-PT',
-        name: 'Português',
-        file: 'pt-PT.json',
-      },
-      {
-        code: 'pt-BR',
-        name: 'Português do Brasil',
-        file: 'pt-BR.json',
-      },
-    ],
-    lazy: true,
-    langDir: 'internationalization',
-    defaultLocale: 'en',
   },
 })
