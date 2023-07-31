@@ -73,7 +73,7 @@ async function searchPathfinder() {
   if (data.value) {
     const datForm = data.value
     if (datForm?.isUpdate)
-      return alert('YA HAS ACTUALIZADO TUS DATOS MUCHAS GRACIAS ;)')
+      return alert(`Estimado Conquistador ${datForm.fullname}, has cumplido el Reto de Actualizar tu datos envia una captura de esto al club`)
 
     let birthdate = datForm.birthdate || null
     if (birthdate) {
