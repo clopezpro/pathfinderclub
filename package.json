@@ -4,6 +4,7 @@
   "scripts": {
     "build": "nuxi build",
     "dev": "nuxi dev",
+    "preview": "nuxt preview",
     "dev:proxy": "cd proxy && pnpm dev",
     "start": "node .output/server/index.mjs",
     "postinstall": "nuxi prepare",
