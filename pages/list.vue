@@ -92,7 +92,7 @@ getTopPathfinder()
       </div>
     </div>
   </div>
-  <div>
+  <div class="overflow-x-auto">
     <UTable :columns="columns" :rows="dataDB">
       <template #id-data="{ index }">
         <div>
