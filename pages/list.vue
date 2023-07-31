@@ -7,10 +7,16 @@ const columns = [{
   label: 'Conquistador',
 },
 {
+  key: 'birth',
+  label: 'Cumpleaños',
+},
+{
   key: 'actions',
   label: '-',
 }]
 const dataDB = ref([])
+
+const monthCurrent = new Date().getMonth() + 1
 const loading = reactive({
   list: false,
 })
@@ -19,6 +25,7 @@ const filter = reactive({
   name: '',
   birthdate: '',
   isUpdate: true,
+  monthCurrent: false,
 })
 
 const alertError = useAlertErrorModal()
@@ -55,6 +62,18 @@ getTopPathfinder()
         </div>
         <UToggle
           v-model="filter.isUpdate" :ui="{
+            container: {
+              base: 'pointer-events-none relative inline-block h-4 w-4 rounded-full bg-white dark:bg-gray-900 shadow  ring-0 transition ease-in-out duration-200',
+            },
+          }"
+        />
+      </div>
+      <div class="flex justify-center">
+        <div class="">
+          Solo quien cumple este  mes {{ monthCurrent }} ?
+        </div>
+        <UToggle
+          v-model="filter.monthCurrent" :ui="{
             container: {
               base: 'pointer-events-none relative inline-block h-4 w-4 rounded-full bg-white dark:bg-gray-900 shadow  ring-0 transition ease-in-out duration-200',
             },

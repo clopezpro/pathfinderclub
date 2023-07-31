@@ -15,11 +15,38 @@ export async function createUser(pathfinderBody: NewCreatedPathfinder) {
 }
 export async function getPathfinder(pathfinderSearch: any) {
   const options: IOptions = pick(pathfinderSearch, ['sortBy', 'limit', 'page', 'projectBy'])
-  const filter = pick(pathfinderSearch, ['birthdate', 'identity', 'fullname', 'isUpdate'])
+  const filter = pick(pathfinderSearch, ['birthdate', 'identity', 'fullname', 'isUpdate', 'monthCurrent'])
+
+  const date = new Date()
+
   if (filter.fullname)
     filter.fullname = { $regex: filter.fullname, $options: 'i' }
 
+  /*   if (filter.monthCurrent)
+    filter.birthdate = { $expr: { $eq: [{ $month: '$birthdate' }, date.getMonth()] } } */
+
+  if (filter.monthCurrent) {
+    delete filter.monthCurrent
+    filter.$expr = {
+      $eq: [{ $month: '$birthdate' }, date.getMonth()],
+    }
+  }
+
   const Pathfinders = await Pathfinder.paginate(filter, options)
+
+  Pathfinders.results = Pathfinders.results.map((data: any) => {
+    if (data.birthdate) {
+      /* const [year, month, day] = data._doc.birthdate?.split('-') */
+      const now = data.birthdate
+
+      data.fullname = data.fullname.toUpperCase()
+      data._doc.birth = `${now.toLocaleDateString('ec-EC', { month: 'short', day: 'numeric' })}`
+    }
+    else {
+      data._doc.birth = 'No tiene fecha de nacimiento'
+    }
+    return data
+  })
   return Pathfinders
 }
 const getPathfinderById = async (id: ObjectId): Promise<IPathfinderDoc | null> => Pathfinder.findById(id)
