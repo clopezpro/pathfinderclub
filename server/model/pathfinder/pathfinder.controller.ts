@@ -38,7 +38,7 @@ export async function validate(identity: string) {
   if (!PathfinderData) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'No forma parte del CLUB, envié sus datos a 0961255848 urgente',
+      statusMessage: `No Estimado  su identificación ${identity} no forma parte del CLUB Abisai, envié sus datos a 0961255848 para registrarlo como uno de nuestros privilegiados conquistadores`,
     })
   }
   return PathfinderData

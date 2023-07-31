@@ -2,7 +2,7 @@
 useHead({
   title: 'Club Abisai Actualiza tus Datos',
   meta: [
-    { name: 'description', content: 'Una aplicación del club de conquistadores Abisai de la Iglesia Realiad de Dios de Monte Sinai en Guayaquil' },
+    { name: 'description', content: 'Una aplicación del club de conquistadores Abisai de la Iglesia Realiad de Dios de Monte Sinai en Guayaquil, para actualizar datos.' },
     { property: 'og:image', itemprop: 'image', content: '/cub_abisai.webp' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:site', content: '@dev_clopez' },
@@ -19,6 +19,7 @@ useHead({
 })
 
 const alertError = useAlertErrorModal()
+const alertM = useAlert()
 const loading = reactive({
   identity: false,
   form: false,
@@ -58,8 +59,17 @@ async function searchPathfinder() {
     body: { identity: form.indentity },
   })
   loading.identity = false
-  if (error.value)
+  if (error.value) {
+    console.log(error.value.statusCode)
+    if (error.value.statusCode === 404) {
+      return alertM({
+        title: 'Conquistador no Encontrado',
+        message: error.value.statusMessage || '',
+        typeShow: 'info',
+      })
+    }
     return alertError(error.value)
+  }
 
   if (data.value) {
     const datForm = data.value
@@ -107,7 +117,7 @@ const showDate = computed(() => {
         <UFormGroup size="xs" hint="Obligatorio" help="Escriba el numero de cédula debe tener 10 dígitos" name="identity" label="Cédula de Indentidad">
           <div flex gap-2>
             <div w-full>
-              <UInput v-model="form.indentity" type="tel" :loading="loading.identity" placeholder="1234567890" icon="i-carbon-identification" />
+              <UInput v-model="form.indentity" :autofocus="true" type="tel" placeholder="1234567890" icon="i-carbon-identification" @keyup.enter="searchPathfinder" />
             </div>
             <div>
               <UButton icon="i-carbon-search" :loading="loading.identity" label="Buscar" :disabled="loading.identity" @click="searchPathfinder" />

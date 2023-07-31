@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onClickOutside, onKeyDown } from '@vueuse/core'
 
-import { provideAlertErrorModal } from '~/composables/alert'
+import { provideAlert, provideAlertErrorModal } from '~/composables/alert'
 
 provideAlertErrorModal(showModalError)
+provideAlert(showModal)
+
 const dataModal = reactive({
   typeShow: 'info' as string,
   show: false as boolean,
@@ -99,7 +101,7 @@ onClickOutside(el, () => {
           </div>
           {{ dataModal.message }}
         </div>
-        <div v-if="dataModal.typeShow" class="flex justify-center w-full gap-2">
+        <div v-if="dataModal.typeShow === 'error'" class="flex justify-center w-full gap-2">
           Mostrar Stack for Dev
           <UToggle
             v-model="showStack" :ui="{

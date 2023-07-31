@@ -2,9 +2,22 @@ const [
   provideAlertErrorModal,
   useAlertErrorModal,
 ] = useSingleton<(e: Error | string | unknown, origin?: string | undefined) => void>()
+
+const [
+  provideAlert,
+  useAlert,
+] = useSingleton<(params: {
+  typeShow?: 'info' | 'error' | 'warning' | 'success' | 'question' | undefined
+  title: string
+  message: string
+  stack?: string | null | undefined
+}) => void>()
+
 export {
   provideAlertErrorModal,
   useAlertErrorModal,
+  provideAlert,
+  useAlert,
 }
 
 /* function useAlertErrorModal() {

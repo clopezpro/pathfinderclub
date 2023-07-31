@@ -26,7 +26,7 @@ useHead({
 <template>
   <NuxtLoadingIndicator />
   <div
-    h-full w-full font-sans view-transition-app transition duration-0
+    h-full w-full font-sans view-transition-app transition duration-0 bg-muted-100 dark:bg-gray-900
   >
     <div id="app-scroller">
       <alertModal />
