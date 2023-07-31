@@ -11,6 +11,12 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vee-validate/nuxt',
   ],
+  colorMode: {
+    preference: 'dark', // default value of $colorMode.preference
+    fallback: 'dark', // fallback value if not system preference found
+    classPrefix: '',
+    classSuffix: '',
+  },
   experimental: {
     inlineSSRStyles: false,
     viewTransition: true,
