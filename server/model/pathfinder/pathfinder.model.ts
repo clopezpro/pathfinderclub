@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
+import paginate from '../../controller/paginate/paginate'
 import type { IPathfinderDoc, IPathfinderModel } from './pathfinder.interfaces'
 
 const pathfinderSchema = new mongoose.Schema<IPathfinderDoc, IPathfinderModel>(
@@ -55,6 +56,7 @@ const pathfinderSchema = new mongoose.Schema<IPathfinderDoc, IPathfinderModel>(
     timestamps: true,
   },
 )
+pathfinderSchema.plugin(paginate)
 pathfinderSchema.static('isIdentityTaken', async function (indentity: string, excludePathfinderId?: mongoose.ObjectId): Promise<boolean> {
   // eslint-disable-next-line @typescript-eslint/no-invalid-this
   const pathfinder = await this.findOne({ indentity, _id: { $ne: excludePathfinderId } })

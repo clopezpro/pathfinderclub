@@ -17,5 +17,14 @@ export const validatePathfinder = {
   identity: Joi.string().required(),
 }
 export const createPathfinder = createUserBody
+export const pathfinderSearch = {
+  identity: Joi.string(),
+  name: Joi.string(),
+  birthdate: Joi.string(),
+  sortBy: Joi.string().optional(),
+  projectBy: Joi.string().optional(),
+  limit: Joi.number().integer().optional(),
+  page: Joi.number().integer().optional(),
+}
 
 export const updatePathfinder = { ...createUserBody, _id: Joi.string().required() }

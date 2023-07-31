@@ -1,4 +1,6 @@
 import type { ObjectId } from 'mongoose'
+import type { IOptions } from '../../controller/paginate/paginate'
+import pick from '../../utils/pick'
 import type { IPathfinderDoc, NewCreatedPathfinder, UpdatePathfinderBody } from './pathfinder.interfaces'
 import Pathfinder from './pathfinder.model'
 
@@ -10,6 +12,15 @@ export async function createUser(pathfinderBody: NewCreatedPathfinder) {
     })
   }
   return Pathfinder.create(pathfinderBody)
+}
+export async function getPathfinder(pathfinderSearch: any) {
+  const options: IOptions = pick(pathfinderSearch, ['sortBy', 'limit', 'page', 'projectBy'])
+  const filter = pick(pathfinderSearch, ['birthdate', 'identity', 'fullname', 'isUpdate'])
+  if (filter.fullname)
+    filter.fullname = { $regex: filter.fullname, $options: 'i' }
+
+  const Pathfinders = await Pathfinder.paginate(filter, options)
+  return Pathfinders
 }
 const getPathfinderById = async (id: ObjectId): Promise<IPathfinderDoc | null> => Pathfinder.findById(id)
 
