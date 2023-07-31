@@ -28,7 +28,7 @@ export async function getPathfinder(pathfinderSearch: any) {
   if (filter.monthCurrent) {
     delete filter.monthCurrent
     filter.$expr = {
-      $eq: [{ $month: '$birthdate' }, date.getMonth()],
+      $eq: [{ $month: '$birthdate' }, date.getMonth() + 1],
     }
   }
 
