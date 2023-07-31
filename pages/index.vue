@@ -1,4 +1,23 @@
 <script setup lang="ts">
+useHead({
+  title: 'Club Abisai Actualiza tus Datos',
+  meta: [
+    { name: 'description', content: 'Una aplicación del club de conquistadores Abisai de la Iglesia Realiad de Dios de Monte Sinai en Guayaquil' },
+    { property: 'og:image', itemprop: 'image', content: '/cub_abisai.webp' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:site', content: '@dev_clopez' },
+    { name: 'twitter:creator', content: '@dev_clopez' },
+  ],
+  link: [
+    {
+      rel: 'icon', type: 'image/webp', href: '/cub_abisai.webp',
+    },
+    {
+      itemprop: 'thumbnailUrl', type: 'image/webp', href: '/cub_abisai.webp',
+    },
+  ],
+})
+
 const alertError = useAlertErrorModal()
 const loading = reactive({
   identity: false,
