@@ -60,11 +60,10 @@ async function searchPathfinder() {
   })
   loading.identity = false
   if (error.value) {
-    console.log(error.value.data.message)
     if (error.value.statusCode === 404) {
       return alertM({
         title: 'Conquistador no Encontrado',
-        message: error.value.message || '',
+        message: error.value.data.message || '',
         typeShow: 'info',
       })
     }
