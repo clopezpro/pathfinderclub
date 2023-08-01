@@ -16,6 +16,59 @@ const columns = [{
 }]
 const dataDB = ref([])
 
+const months = [{
+  name: 'Todos',
+  value: undefined,
+}, {
+  name: 'Enero',
+  value: 0,
+},
+{
+  name: 'Febrero',
+  value: 1,
+},
+{
+  name: 'Marzo',
+  value: 2,
+},
+{
+  name: 'Abril',
+  value: 3,
+},
+{
+  name: 'Mayo',
+  value: 4,
+},
+{
+  name: 'Junio',
+  value: 5,
+},
+{
+  name: 'Julio',
+  value: 6,
+},
+{
+  name: 'Agosto',
+  value: 7,
+},
+{
+  name: 'Septiembre',
+  value: 8,
+},
+{
+  name: 'Octubre',
+  value: 9,
+},
+{
+  name: 'Noviembre',
+  value: 10,
+},
+{
+  name: 'Diciembre',
+  value: 11,
+},
+]
+
 const monthCurrent = new Date().getMonth() + 1
 const loading = reactive({
   list: false,
@@ -26,8 +79,16 @@ const filter = reactive({
   birthdate: '',
   isUpdate: true,
   monthCurrent: false,
+  month: monthCurrent,
 })
 
+/* watch(filter, () => {
+  if (filter.monthCurrent)
+    filter.month = monthCurrent
+
+  else
+    filter.month = undefined
+}) */
 const alertError = useAlertErrorModal()
 async function getTopPathfinder() {
   const params = Object.keys(filter).reduce((obj, key) => {
@@ -68,20 +129,14 @@ getTopPathfinder()
           }"
         />
       </div>
-      <div class="flex justify-center">
-        <div class="">
-          Solo quien cumple este  mes {{ monthCurrent }} ?
-        </div>
-        <UToggle
-          v-model="filter.monthCurrent" :ui="{
-            container: {
-              base: 'pointer-events-none relative inline-block h-4 w-4 rounded-full bg-white dark:bg-gray-900 shadow  ring-0 transition ease-in-out duration-200',
-            },
-          }"
-        />
+      <div class="">
+        <UFormGroup name="email" :label="`Solo quien cumple este  mes ${filter.month + 1} ?`">
+          <USelect v-model="filter.month" icon="i-carbon-calendar-heat-map" :options="months" option-attribute="name" />
+        </UFormGroup>
       </div>
+      <div />
       <div>
-        <UFormGroup size="xs" name="lastname">
+        <UFormGroup size="xs" name="lastname" label="Buscar por Nombres y Apellidos">
           <UInput v-model="filter.fullname" placeholder="Moran Loor" icon="i-carbon-identification" />
         </UFormGroup>
       </div>
@@ -109,19 +164,4 @@ getTopPathfinder()
       </template>
     </UTable>
   </div>
-
-  <!--  <table class="w-full border border-gray-800">
-    <thead>
-      <tr>
-        <th v-for="column in columns" :key="column.key">
-          {{ column.label }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(data, index) in dataDB" :key="index">
-        <td>{{ data.fullname }}</td>
-      </tr>
-    </tbody>
-  </table> -->
 </template>

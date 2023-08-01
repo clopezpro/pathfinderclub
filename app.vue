@@ -17,7 +17,6 @@ import '@unocss/reset/tailwind.css'
 
 <style>
 html, body , #__nuxt{
-  height: 100vh;
   margin: 0;
   padding: 0;
 }
