@@ -79,7 +79,7 @@ const filter = reactive({
   birthdate: '',
   isUpdate: true,
   monthCurrent: false,
-  month: monthCurrent,
+  month: undefined,
 })
 
 /* watch(filter, () => {
