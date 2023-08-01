@@ -26,14 +26,13 @@ export async function getPathfinder(pathfinderSearch: any) {
   /*   if (filter.monthCurrent)
     filter.birthdate = { $expr: { $eq: [{ $month: '$birthdate' }, date.getMonth()] } } */
 
-  if (filter.month) {
+  if (filter.month && filter.month != 'Todos') {
     filter.month = parseInt(filter.month)
     filter.$expr = {
       $eq: [{ $month: '$birthdate' }, filter.month + 1],
     }
-    delete filter.month
   }
-
+  delete filter.month
   const Pathfinders = await Pathfinder.paginate(filter, options)
 
   Pathfinders.results = Pathfinders.results.map((data: any) => {

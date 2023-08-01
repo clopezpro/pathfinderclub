@@ -18,7 +18,7 @@ const dataDB = ref([])
 
 const months = [{
   name: 'Todos',
-  value: undefined,
+  value: null,
 }, {
   name: 'Enero',
   value: 0,
@@ -68,8 +68,6 @@ const months = [{
   value: 11,
 },
 ]
-
-const monthCurrent = new Date().getMonth() + 1
 const loading = reactive({
   list: false,
 })
@@ -79,7 +77,7 @@ const filter = reactive({
   birthdate: '',
   isUpdate: true,
   monthCurrent: false,
-  month: undefined,
+  month: null,
 })
 
 /* watch(filter, () => {
@@ -130,7 +128,7 @@ getTopPathfinder()
         />
       </div>
       <div class="">
-        <UFormGroup name="email" :label="`Solo quien cumple este  mes ${filter.month + 1} ?`">
+        <UFormGroup name="email" :label="`Solo quien cumple este  mes ${parseInt(filter.month) ? parseInt(filter.month) + 1 : 'Todos'} ?`">
           <USelect v-model="filter.month" icon="i-carbon-calendar-heat-map" :options="months" option-attribute="name" />
         </UFormGroup>
       </div>
