@@ -27,6 +27,7 @@ export async function getPathfinder(pathfinderSearch: any) {
     filter.birthdate = { $expr: { $eq: [{ $month: '$birthdate' }, date.getMonth()] } } */
 
   if (filter.month) {
+    filter.month = parseInt(filter.month)
     filter.$expr = {
       $eq: [{ $month: '$birthdate' }, filter.month + 1],
     }
