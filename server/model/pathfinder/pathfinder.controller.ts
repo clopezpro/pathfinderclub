@@ -1,4 +1,4 @@
-import type { ObjectId } from 'mongoose'
+import type mongoose from 'mongoose'
 import type { IOptions } from '../../controller/paginate/paginate'
 import pick from '../../utils/pick'
 import type { IPathfinderDoc, NewCreatedPathfinder, UpdatePathfinderBody } from './pathfinder.interfaces'
@@ -26,8 +26,8 @@ export async function getPathfinder(pathfinderSearch: any) {
   /*   if (filter.monthCurrent)
     filter.birthdate = { $expr: { $eq: [{ $month: '$birthdate' }, date.getMonth()] } } */
 
-  if (filter.month && filter.month != 'Todos') {
-    filter.month = parseInt(filter.month)
+  if (filter.month && filter.month !== 'Todos') {
+    filter.month = Number.parseInt(filter.month)
     filter.$expr = {
       $eq: [{ $month: '$birthdate' }, filter.month + 1],
     }
@@ -49,9 +49,12 @@ export async function getPathfinder(pathfinderSearch: any) {
   })
   return Pathfinders
 }
-const getPathfinderById = async (id: ObjectId): Promise<IPathfinderDoc | null> => Pathfinder.findById(id)
 
-export async function updatePathfinder(pathfinderBody: UpdatePathfinderBody, id: ObjectId) {
+export const getPathfinderByEmail = async (email: string): Promise<IPathfinderDoc | null> => Pathfinder.findOne({ email })
+
+export const getPathfinderById = async (id: mongoose.Types.ObjectId): Promise<IPathfinderDoc | null> => Pathfinder.findById(id)
+
+export async function updatePathfinder(pathfinderBody: UpdatePathfinderBody, id: mongoose.Types.ObjectId) {
   const data = await getPathfinderById(id)
   if (!data) {
     throw createError({
@@ -63,7 +66,7 @@ export async function updatePathfinder(pathfinderBody: UpdatePathfinderBody, id:
   if (pathfinderBody.email && (await Pathfinder.isIdentityTaken(pathfinderBody.indentity || '', id))) {
     throw createError({
       statusCode: 404,
-      statusMessage: 'LA CEDULA YA EXISTE ',
+      statusMessage: `LA CÉDULA ${pathfinderBody.indentity} YA EXISTE `,
     })
   }
   pathfinderBody.isUpdate = true
@@ -71,6 +74,7 @@ export async function updatePathfinder(pathfinderBody: UpdatePathfinderBody, id:
   await data.save()
   return data
 }
+
 export async function validate(identity: string) {
   const PathfinderData = await Pathfinder.findOne({ identity })
   if (!PathfinderData) {

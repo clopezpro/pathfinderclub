@@ -3,7 +3,7 @@ useHead({
   title: 'Club Abisai Actualiza tus Datos',
   meta: [
     { name: 'description', content: 'Una aplicación del club de conquistadores Abisai de la Iglesia Realiad de Dios de Monte Sinai en Guayaquil, para actualizar datos.' },
-    { property: 'og:image', itemprop: 'image', content: '/cub_abisai.webp' },
+    { property: 'og:image', content: '/cub_abisai.webp' },
     { name: 'twitter:card', content: 'summary_large_image' },
     { name: 'twitter:site', content: '@dev_clopez' },
     { name: 'twitter:creator', content: '@dev_clopez' },
@@ -13,7 +13,7 @@ useHead({
       rel: 'icon', type: 'image/webp', href: '/cub_abisai.webp',
     },
     {
-      itemprop: 'thumbnailUrl', type: 'image/webp', href: '/cub_abisai.webp',
+      type: 'image/webp', href: '/cub_abisai.webp',
     },
   ],
 })
@@ -30,7 +30,7 @@ const form = reactive({
   indentity: '',
   lastname: '',
   fullname: '',
-  birthdate: null,
+  birthdate: undefined as string | undefined,
   address: '',
   comment: '',
   phone: '',
@@ -45,7 +45,7 @@ async function registerPathfinder() {
   if (error.value)
     return alertError(error.value)
 
-  alert(`Estimado Conquistador ${form.fullname}, has cumplido el Reto de Actualizar tu datos envia una captura de esto al club`)
+  alert(`Estimado Conquistador ${form.fullname}, has cumplido el Reto de Actualizar tu datos envía una captura de esto al club`)
   form.isUpdate = true
   form._id = undefined
 }
@@ -71,12 +71,13 @@ async function searchPathfinder() {
   }
 
   if (data.value) {
-    const datForm = data.value
+    const datForm = data.value as typeof form
     if (datForm?.isUpdate)
-      return alert(`Estimado Conquistador ${datForm.fullname}, has cumplido el Reto de Actualizar tu datos envia una captura de esto al club`)
+      return alert(`Estimado Conquistador ${datForm.fullname}, has cumplido el Reto de Actualizar tu datos envía una captura de esto al club`)
 
-    let birthdate = datForm.birthdate || null
-    if (birthdate) {
+    let birthdate = datForm.birthdate || null as string | null
+
+    if (birthdate != null && typeof birthdate === 'string') {
       const [year, month, day] = birthdate.split('-')
       birthdate = `${year}-${month}-${day}`
     }
@@ -96,7 +97,7 @@ const showDate = computed(() => {
     const now = new Date(+year, +month - 1, +day)
 
     const f = new Date().getFullYear()
-    const yearsOld = f - parseInt(year)
+    const yearsOld = f - Number.parseInt(year)
 
     return `${now.toLocaleDateString('ec-EC', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })} Tienes ${yearsOld} ${yearsOld <= 1 ? 'año' : 'años'}`
   }
@@ -155,12 +156,12 @@ const showDate = computed(() => {
           </UFormGroup>
         </div>
         <div>
-          <UFormGroup size="xs" name="address" label="Tu direccion">
-            <UInput v-model="form.address" placeholder="Monte sinahi realidad de dios MZ-111 SOLAR: 444" type="text" icon="i-carbon-map" />
+          <UFormGroup size="xs" name="address" label="Tu dirección">
+            <UInput v-model="form.address" placeholder="Monte Sinai realidad de dios MZ-111 SOLAR: 444" type="text" icon="i-carbon-map" />
           </UFormGroup>
         </div>
         <div>
-          <UFormGroup size="xs" name="telefono" label="Numero de teléfono de contacto">
+          <UFormGroup size="xs" name="teléfono" label="Numero de teléfono de contacto">
             <UInput v-model="form.phone" placeholder="096125500" type="tel" icon="i-carbon-phone-ip" />
           </UFormGroup>
         </div>
