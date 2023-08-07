@@ -58,7 +58,7 @@ export async function refreshAuth(refreshToken: string): Promise<IPathfinderWith
   }
   catch (error) {
     throw createError({
-      statusCode: 401,
+      statusCode: 402,
       statusMessage: 'Please authenticate',
     })
   }

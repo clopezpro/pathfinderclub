@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@pinia/nuxt',
     '@vee-validate/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
   ],
   colorMode: {
     preference: 'dark', // default value of $colorMode.preference
@@ -32,7 +33,7 @@ export default defineNuxtConfig({
     SEED: process.env.SEED,
     PASS_TOKEN: process.env.PASS_TOKEN,
     NODE_ENV: process.env.NODE_ENV,
-    jwt: {
+    jwtConfig: {
       secret: process.env.JWT_SECRET,
       accessExpirationMinutes: process.env.JWT_ACCESS_EXPIRATION_MINUTES,
       refreshExpirationDays: process.env.JWT_REFRESH_EXPIRATION_DAYS,

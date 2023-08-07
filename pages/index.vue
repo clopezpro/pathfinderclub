@@ -104,6 +104,14 @@ const showDate = computed(() => {
   return ''
 })
 
+async function checkSession() {
+  const { data, error } = await fetchMAHIRFULL('/api/auth/getSession')
+
+  if (error.value)
+    return alertError(error.value)
+
+  console.log(data.value)
+}
 // registerPathfinder()
 </script>
 
@@ -120,7 +128,7 @@ const showDate = computed(() => {
               <UInput v-model="form.indentity" :autofocus="true" type="tel" placeholder="1234567890" icon="i-carbon-identification" @keyup.enter="searchPathfinder" />
             </div>
             <div>
-              <UButton icon="i-carbon-search" :loading="loading.identity" label="Buscar" :disabled="loading.identity" @click="searchPathfinder" />
+              <UButton icon="i-carbon-search" :loading="loading.identity" label="Buscar" :disabled="loading.identity" @click="checkSession" />
             </div>
           </div>
         </UFormGroup>

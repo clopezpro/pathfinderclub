@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
+import bcrypt from 'bcryptjs'
 import paginate from '../../controller/paginate/paginate'
 import { roles } from '../../config/roles'
 import type { IPathfinderDoc, IPathfinderModel } from './pathfinder.interfaces'
@@ -78,6 +79,12 @@ pathfinderSchema.static('isIdentityTaken', async function (indentity: string, ex
   // eslint-disable-next-line @typescript-eslint/no-invalid-this
   const pathfinder = await this.findOne({ indentity, _id: { $ne: excludePathfinderId } })
   return !!pathfinder
+})
+pathfinderSchema.method('isPasswordMatch', async function (password: string): Promise<boolean> {
+  // eslint-disable-next-line @typescript-eslint/no-invalid-this
+  const Pathfinder = this
+
+  return bcrypt.compare(password, Pathfinder.password || '')
 })
 
 const Pathfinder = mongoose.model<IPathfinderDoc, IPathfinderModel>('Pathfinders', pathfinderSchema)

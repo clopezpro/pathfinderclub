@@ -1,4 +1,9 @@
 <script setup>
+definePageMeta({
+  title: 'Lista Pathfinders',
+  middleware: ['authenticated'],
+})
+
 const columns = [{
   key: 'id',
   label: 'ID',
@@ -95,7 +100,7 @@ async function getTopPathfinder() {
     return obj
   }, {})
   loading.list = true
-  const { data, error } = await useFetch('/api/pathfinders/top', {
+  const { data, error } = await fetchMAHIRFULL('/api/pathfinders/top', {
     method: 'POST',
     body: { ...params },
   })
