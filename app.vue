@@ -1,22 +1,38 @@
 <script setup>
-import '@unocss/reset/tailwind.css'
+useHead({
+  link: [
+    {
+      rel: 'icon', type: 'image/webp', href: '/movies.webp',
+    },
+  ],
+})
 </script>
 
 <template>
-  <NuxtLoadingIndicator />
-  <div
-    h-full w-full font-sans view-transition-app transition duration-0 bg-muted-100 dark:bg-gray-900
-  >
-    <div id="app-scroller">
-      <alertModal />
-
-      <NuxtPage />
-    </div>
-  </div>
+  <NuxtLayout>
+    <AlertModal />
+    <NuxtLoadingIndicator color="#348feb" :height="6" />
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <style>
+/* body {
+  background-color: #fff;
+  color: rgba(0,0,0,0.8);
+}
+.dark body {
+ background-color: #091a28;
+  color: #ebf4f1;
+} */
+
+.sepia-mode body {
+  background-color: #f1e7d0;
+  color: #433422;
+}
+
 html, body , #__nuxt{
+  height: 100vh;
   margin: 0;
   padding: 0;
 }

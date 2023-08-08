@@ -8,18 +8,17 @@ export async function login(req: any) {
   const tokens = await tokenService.generateAuthTokens(pathfinder)
   return { pathfinder, tokens }
 }
-
-export async function logout(req: any) {
-  await authService.logout(req.body.refreshToken)
+export async function logout(event: H3Event) {
+  const authCookie = getCookie(event, 'tokenRefresh') || ''
+  await authService.logout(authCookie)
+  deleteCookie(event, 'tokenRefresh')
   return createError({
     statusCode: 201,
     statusMessage: 'Logout successfully',
   })
 }
-
 export async function refreshTokens(event: H3Event) {
   const authCookie = getCookie(event, 'tokenRefresh')
-
   const token = authCookie || ''
   const userWithTokens = await authService.refreshAuth(token)
   return { ...userWithTokens }

@@ -69,7 +69,7 @@ export const useAuthUserStore = defineStore('useAuthUserStore', {
         name: '',
         role: '',
       }
-      const token = useCookie('auth')
+      const token = useCookie('authPathfinder')
       token.value = null
     },
     async logout(redirect = true) {
@@ -79,8 +79,15 @@ export const useAuthUserStore = defineStore('useAuthUserStore', {
           method: 'POST',
           credentials: 'include',
         })
+        this.loading = false
         if (error.value)
           return alertError(error.value)
+
+        this.cleanData()
+        return await navigateTo('/login', {
+          replace: true,
+        })
+
         /* if (result.status === 204 || result.status === 404) {
           this.loading = false
           this.cleanData()

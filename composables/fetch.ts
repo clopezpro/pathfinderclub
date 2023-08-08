@@ -13,7 +13,6 @@ export function fetchMAHIRFULL(path: string, opts = {}) {
       }
     },
     onRequestError({ request, options, error }) {
-      console.log('[fetch request error]', request, error, options)
       // Handle the request errors
     },
     onResponse({ request, response, options }) {

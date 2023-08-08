@@ -9,7 +9,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
-    '@vee-validate/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
   ],
   colorMode: {

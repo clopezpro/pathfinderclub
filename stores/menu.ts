@@ -52,6 +52,10 @@ export const useMenuStore = defineStore('useMenuStore', () => {
     if (showMenu.value && minimized.value)
       minimized.value = false
   }
+  const closeMenu=()=>{
+
+      showMenu.value = false
+  }
   const getMenuActive = () => {
     return menu.value.find(menu => menu.selected)
   }
@@ -63,6 +67,7 @@ export const useMenuStore = defineStore('useMenuStore', () => {
     getMenus: menu,
     minimizeBar,
     selectMenu,
+    closeMenu,
     openAndCloseMenu,
   }
 })
