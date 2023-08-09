@@ -81,7 +81,7 @@ pathfinderSchema.static('isIdentityTaken', async function (indentity: string, ex
   return !!pathfinder
 })
 pathfinderSchema.method('isPasswordMatch', async function (password: string): Promise<boolean> {
-  // eslint-disable-next-line @typescript-eslint/no-invalid-this
+  // eslint-disable-next-line @typescript-eslint/no-invalid-this, @typescript-eslint/no-this-alias
   const Pathfinder = this
 
   return bcrypt.compare(password, Pathfinder.password || '')
