@@ -2,10 +2,10 @@ import { useFetch } from '#app'
 import { useAuthUserStore } from '~/stores/auth'
 
 let tryFetch = 0
-export function fetchMAHIRFULL(path: string, opts = {}) {
+export function fetchMAHIRFULL<T>(path: string, opts = {}) {
   const config = useRuntimeConfig()
-  return useFetch(path, {
-    baseURL: config.public.baseURL,
+  return useFetch<T>(path, {
+    baseURL: config.public.apiBaseUrl || undefined,
     credentials: 'include',
     onRequest({ request, options }) {
       options.headers = {

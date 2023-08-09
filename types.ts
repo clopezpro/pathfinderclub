@@ -15,7 +15,7 @@ export interface IUser {
   tokens: {
     access: TokensT
   }
-  loading: boolean
+  loading?: boolean
 
 }
 export interface IModule {

@@ -26,6 +26,12 @@ export const MODULE_LIST: IModule[] = [
     path: '/list',
     subMenus: [
       {
+        name: 'TakeList',
+        icon: 'i-carbon-license-draft',
+        path: '/pathfinder/takeList',
+
+      },
+      {
         name: 'List',
         icon: 'i-carbon-notification',
         path: '/pathfinder/list',
