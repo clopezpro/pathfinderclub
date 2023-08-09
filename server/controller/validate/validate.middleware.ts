@@ -1,7 +1,9 @@
 import Joi from 'joi'
 
 function validate(schema: Record<string, any>, req: any): void {
-  const { error } = Joi.object(schema).prefs({ errors: { label: 'key' } }).validate(req)
+  const { error } = Joi.object(schema).prefs({ errors: { label: 'key' } }).validate(req, {
+    abortEarly: false,
+  })
 
   if (error) {
     const errorMessage = error.details.map(details => details.message).join(', ')
