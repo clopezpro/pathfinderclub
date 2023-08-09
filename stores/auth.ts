@@ -28,7 +28,7 @@ export const useAuthUserStore = defineStore('useAuthUserStore', {
       return this.tokens.access.token !== null
     },
     getLoading(): boolean {
-      return this.loading
+      return this.loading || false
     },
   },
   persist: {
@@ -55,10 +55,10 @@ export const useAuthUserStore = defineStore('useAuthUserStore', {
       if (route.params.nextUrl)
         return await navigateTo(route.params.nextUrl as string)
       else
-      if (route.params.nextUrl)
-        return await navigateTo(route.params.nextUrl)
-      else
-        return await navigateTo('/')
+        if (route.params.nextUrl)
+          return await navigateTo(route.params.nextUrl)
+        else
+          return await navigateTo('/')
     },
     cleanData() {
       this.tokens.access.token = null
@@ -103,17 +103,16 @@ export const useAuthUserStore = defineStore('useAuthUserStore', {
     },
     async refreshToken() {
       this.loading = true
-      const { data, error } = await fetchMAHIRFULL('/api/auth/refresh-tokens')
+      const { data, error } = await fetchMAHIRFULL<IUser>('/api/auth/refresh-tokens')
 
       this.loading = false
       if (error.value) {
         if (error.value.statusCode === 402)
           return await navigateTo('/login')
       }
-
-      if (data.value.status === 200) {
-        this.tokens.access.token = data.value._data.tokens.access.token
-        this.tokens.access.expires = data.value._data.tokens.access.expires
+      if (data.value && Object.keys(data.value).includes('tokens')) {
+        this.tokens.access.token = data.value.tokens.access.token
+        this.tokens.access.expires = data.value.tokens.access.expires
       }
       else {
         this.cleanData()
