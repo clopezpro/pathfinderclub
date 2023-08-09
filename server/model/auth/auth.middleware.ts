@@ -1,3 +1,4 @@
+import { H3Error } from 'h3'
 import type { EventHandler, H3Event } from 'h3'
 import passport from 'passport'
 import type { IPathfinderDoc } from '../pathfinder/pathfinder.interfaces'
@@ -14,7 +15,6 @@ function verifyCallback(e: H3Event, resolve: any, reject: any) {
 function authMiddleware(h: EventHandler) {
   return async (e: H3Event) => {
     const authCookie = getCookie(e, 'tokenRefresh')
-
     if (!authCookie) {
       throw createError({
         statusCode: 403,
@@ -38,6 +38,9 @@ function authMiddleware(h: EventHandler) {
           e.context.user = data.pathfinder
           return h(e)
         } */
+        /* console.log(err, 'errr') */
+        if (err instanceof H3Error)
+          throw err
 
         throw createError({
           statusCode: 401,
