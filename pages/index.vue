@@ -128,7 +128,7 @@ async function checkSession() {
               <UInput v-model="form.indentity" :autofocus="true" type="tel" placeholder="1234567890" icon="i-carbon-identification" @keyup.enter="searchPathfinder" />
             </div>
             <div>
-              <UButton icon="i-carbon-search" :loading="loading.identity" label="Buscar" :disabled="loading.identity" @click="checkSession" />
+              <UButton icon="i-carbon-search" :loading="loading.identity" label="Buscar" :disabled="loading.identity" @click="searchPathfinder" />
             </div>
           </div>
         </UFormGroup>

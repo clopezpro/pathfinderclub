@@ -13,6 +13,7 @@ useHead({
     <AlertModal />
     <NuxtLoadingIndicator color="#348feb" :height="6" />
     <NuxtPage />
+    <UNotifications />
   </NuxtLayout>
 </template>
 

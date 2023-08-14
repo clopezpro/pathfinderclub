@@ -11,7 +11,7 @@ export interface IAttendanceHeader {
 }
 export interface IAttendanceBody {
   pathfinderId: mongoose.Types.ObjectId
-  attendanceHeadId: mongoose.Types.ObjectId
+  attendanceHeaderId: mongoose.Types.ObjectId
   attendance: boolean
   comment?: string
 }

@@ -42,6 +42,9 @@ function authMiddleware(h: EventHandler) {
         if (err instanceof H3Error)
           throw err
 
+        if (err.statusCode && err.statusCode !== 401)
+          throw err
+
         throw createError({
           statusCode: 401,
           statusMessage: err.toString(),

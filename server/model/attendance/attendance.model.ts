@@ -23,15 +23,16 @@ const attendanceHeaderSchema = new mongoose.Schema<IAttendanceHeaderDoc, IAttend
     timestamps: true,
   },
 )
+attendanceHeaderSchema.plugin(paginate)
 const attendanceBodySchema = new mongoose.Schema<IAttendanceBodyDoc, IAttendanceBodyModel>(
   {
     pathfinderId: {
       type: Schema.Types.ObjectId,
-      ref: 'Pathfinders',
+      ref: 'pathfinders',
     },
-    attendanceHeadId: {
+    attendanceHeaderId: {
       type: Schema.Types.ObjectId,
-      ref: 'AttendanceHeaders',
+      ref: 'attendanceheaders',
     },
     attendance: {
       type: Boolean,
@@ -43,9 +44,8 @@ const attendanceBodySchema = new mongoose.Schema<IAttendanceBodyDoc, IAttendance
     },
   },
 )
-attendanceHeaderSchema.plugin(paginate)
 
-const AttendanceHeader = mongoose.model<IAttendanceHeaderDoc, IAttendanceHeaderModel>('AttendanceHeaders', attendanceHeaderSchema)
-const AttendanceBody = mongoose.model<IAttendanceBodyDoc, IAttendanceBodyModel>('AttendanceBodies', attendanceBodySchema)
+const AttendanceHeader = mongoose.model<IAttendanceHeaderDoc, IAttendanceHeaderModel>('attendanceheaders', attendanceHeaderSchema)
+const AttendanceBody = mongoose.model<IAttendanceBodyDoc, IAttendanceBodyModel>('attendancebodies', attendanceBodySchema)
 
 export { AttendanceHeader, AttendanceBody }

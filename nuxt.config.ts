@@ -12,10 +12,7 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
   ],
   colorMode: {
-    preference: 'dark', // default value of $colorMode.preference
-    fallback: 'dark', // fallback value if not system preference found
-    classPrefix: '',
-    classSuffix: '',
+    preference: 'system',
   },
   experimental: {
     inlineSSRStyles: false,
