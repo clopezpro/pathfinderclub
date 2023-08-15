@@ -104,3 +104,7 @@ export const MONTHS = [{
   value: 11,
 },
 ]
+export function OnlyMonths() {
+  MONTHS.shift()
+  return MONTHS
+}

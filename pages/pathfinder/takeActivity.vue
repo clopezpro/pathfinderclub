@@ -13,6 +13,7 @@ const items = [{
   icon: 'i-carbon-license-draft',
 
 }]
+const Activities = ref([])
 const loading = reactive({
   list: false,
   process: false,
@@ -89,12 +90,35 @@ async function processActivity() {
   })
 }
 
+async function getActivityByMonth() {
+  loading.list = true
+  let month = 0
+  let year = 2023
+  if (form.date) {
+    month = new Date(form.date).getMonth()
+    year = new Date(form.date).getFullYear()
+  }
+  else {
+    month = new Date().getMonth()
+    year = new Date().getFullYear()
+  }
+  const { data, error } = await fetchMAHIRFULL('/api/pathfinders/getActivityByMonth', {
+    method: 'POST',
+    server: false,
+    body: { month, year },
+  })
+  loading.list = false
+  if (error.value)
+    return alertError(error.value)
+
+  Activities.value = data.value
+}
 /* watch(form.date, async () => {
-  console.log('change')
-  await getAttendance()
+  await getActivityByMonth()
 }) */
 setDateCurrent()
 getTopPathfinder()
+getActivityByMonth()
 </script>
 
 <template>
@@ -111,14 +135,31 @@ getTopPathfinder()
       </template>
       <template #item="{ item }">
         <UCard>
-          <div v-if="item.key === 'activity'" class="md:w-1/2 md:mx-auto">
+          <div v-if="item.key === 'activity'" class=" md:mx-auto  flex">
+            <div border border-gray-800 p-2 rounded-md>
+              <UTable
+                :columns="[{
+                             key: 'name',
+                           },
+                           { key: 'type' },
+                           { key: 'date' },
+
+                ]" :rows="Activities"
+              >
+                >
+              </UTable>
+
+              <!--  <div v-for="activity in Activities" :key="activity._id">
+                {{ activity.name }}
+              </div> -->
+            </div>
             <div class="border border-gray-800 p-2 rounded-md ">
               <div class="text-primary-500 text-center">
                 Tomar Actividad
               </div>
               <div>
                 <UFormGroup size="xs" name="date" label="Fecha Actividad">
-                  <UInput v-model="form.date" my-2 border type="date" icon="i-carbon-calendar-heat-map" />
+                  <UInput v-model="form.date" my-2 border type="date" icon="i-carbon-calendar-heat-map" @change="getActivityByMonth" />
                   <p text-xs />
                 </UFormGroup>
               </div>

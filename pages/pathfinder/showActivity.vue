@@ -1,16 +1,15 @@
 <script setup>
-import { MONTHS } from '~/constants/lists'
+import { OnlyMonths } from '~/constants/lists'
 
 definePageMeta({
   title: 'Lista Actividades',
   middleware: ['authenticated'],
 })
-
 const columns = [{
   key: 'id',
   label: 'ID',
 }, {
-  key: 'fullname',
+  key: 'name',
   label: 'Conquistador',
 }]
 const dataDB = ref([])
@@ -24,10 +23,10 @@ const loading = reactive({
 const filter = reactive({
   name: '',
   year: new Date().getFullYear(),
-  month: null,
+  month: new Date().getMonth(),
 })
 
-const Activity = ref([])
+const Activities = ref([])
 const ActivityBodies = ref([])
 /* watch(filter, () => {
   if (filter.monthCurrent)
@@ -38,102 +37,56 @@ const ActivityBodies = ref([])
 }) */
 
 const showColumns = computed(() => {
-  if (Activity.value.length > 0) {
+  if (Activities.value.length > 0) {
     return [
       ...columns,
-      ...Activity.value.map((rs) => {
+      ...Activities.value.map((rs) => {
         return {
           key: rs._id,
-          label: rs.name,
-          component: 'UCheckbox',
-          props: {
-            'value': `row.grades.${rs._id}`,
-            'true-value': true,
-            'false-value': false,
-          },
+          label: `${rs.name} ${rs.dateStr}`,
         }
       }),
+      {
+        key: 'average',
+        label: 'Promedio',
+      },
+
     ]
   }
 
   return [...columns]
 })
-const showData = computed(() => {
-  if (ActivityBodies.value.length > 0) {
-    const activityKeys = Activity.value.map(rs => rs._id)
 
-    return dataDB.value.map((rs) => {
-      activityKeys.forEach((idActivity) => {
-        rs[idActivity] = ActivityBodies.value.find(rsYes => idActivity === rsYes.activityHeaderId && rs._id === rsYes.pathfinderId)?.grade || 0
-      })
-      return rs
-    })
-  }
-  return [...dataDB.value]
-})
-async function getActivity() {
+async function getActivityV2() {
   loading.process = true
-  const { data, error } = await fetchMAHIRFULL('/api/pathfinders/getActivity', {
+
+  const { data, error } = await fetchMAHIRFULL('/api/pathfinders/getActivityResume', {
     method: 'POST',
+    server: false,
     body: { month: filter.month, year: filter.year },
   })
   loading.process = false
   if (error.value)
     return alertError(error.value)
 
-  if (data.value.results.length > 0) {
-    Activity.value = data.value.results
-    getActivityBodies()
-  }
-  else {
-    dataDB.value = dataDB.value.map((rs) => {
-      rs.grades = []
-      return rs
-    })
-  }
+  dataDB.value = data.value.data
+  Activities.value = data.value.activities
 }
-async function getActivityBodies() {
-  loading.process = true
-  const { data, error } = await fetchMAHIRFULL('/api/pathfinders/getActivityBodies', {
-    method: 'POST',
-    body: { headers: Activity.value.map(rs => rs._id) },
+onMounted(() => {
+  nextTick(async () => {
+    await getActivityV2()
+    //
   })
-  loading.process = false
-  if (error.value)
-    return alertError(error.value)
-
-  if (data.value.length > 0) {
-    const yesActivity = data.value
-    ActivityBodies.value = data.value
-  }
-  else {
-    ActivityBodies.value = []
-  }
-}
-
-async function getTopPathfinder() {
-  const params = Object.keys(filter).reduce((obj, key) => {
-    if (filter && Object.prototype.hasOwnProperty.call(filter, key) && filter[key])
-      obj[key] = filter[key]
-    return obj
-  }, {})
-  loading.list = true
-  const { data, error } = await fetchMAHIRFULL('/api/pathfinders/top', {
-    method: 'POST',
-    body: { ...params, isUpdate: true },
-  })
-  loading.list = false
-  if (error.value)
-    return alertError(error.value)
-
-  dataDB.value = data.value.results
-}
-// getActivity()
-getTopPathfinder()
+})
 </script>
 
 <template>
-  <div class="flex   justify-end">
+  <div class="flex  items-center  justify-end">
+    <div class="w-full text-center">
+      <h1 text-primary-600 md:text-2xl font-bold>
+        ACTIVIDADES REALIZADAS POR MES
+      </h1>
+    </div>
     <div />
     <div class="border border-gray-800 p-2 rounded-md">
       <div class="text-primary-500 text-center">
@@ -142,7 +95,7 @@ getTopPathfinder()
       <div />
       <div class="">
         <UFormGroup name="month" :label="`Solo ACTIVIDADES este  mes ${parseInt(filter.month) ? parseInt(filter.month) + 1 : 'Todos'} ?`">
-          <USelect v-model="filter.month" icon="i-carbon-calendar-heat-map" :options="MONTHS" option-attribute="name" />
+          <USelect v-model="filter.month" icon="i-carbon-calendar-heat-map" :options="OnlyMonths()" option-attribute="name" />
         </UFormGroup>
       </div>
       <div>
@@ -151,14 +104,36 @@ getTopPathfinder()
         </UFormGroup>
       </div>
       <div class="flex justify-end">
-        <UButton @click="getActivity">
+        <UButton @click="getActivityV2">
           Buscar
         </UButton>
       </div>
     </div>
   </div>
   <div class="overflow-x-auto">
-    <UTable :columns="showColumns" :rows="showData">
+    <UTable :columns="showColumns" :rows="dataDB">
+      <template v-for="activity in Activities" :key="activity._id" #[`${activity._id}-header`]>
+        <UPopover>
+          <UButton color="white" :label="activity.name" trailing-icon="i-heroicons-chevron-down-20-solid" />
+
+          <template #panel>
+            <div p-2>
+              <div class="text-primary-500 text-center">
+                Nombre: {{ activity.name }}
+              </div>
+              <div class="text-primary-500 ">
+                Fecha: {{ activity.dateStr }}
+              </div>
+              <div v-if=" activity.comment.length > 0" class="text-primary-500 ">
+                Comment:{{ activity.comment }}
+              </div>
+              <div class="text-primary-500 ">
+                Tipo: {{ activity.type }}
+              </div>
+            </div>
+          </template>
+        </UPopover>
+      </template>
       <template #id-data="{ index }">
         <div>
           {{ index + 1 }}

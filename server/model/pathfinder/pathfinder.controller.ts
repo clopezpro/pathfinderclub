@@ -54,6 +54,8 @@ export const getPathfinderByEmail = async (email: string): Promise<IPathfinderDo
 
 export const getPathfinderById = async (id: mongoose.Types.ObjectId): Promise<IPathfinderDoc | null> => Pathfinder.findById(id)
 
+export const getPathfinderSByOnlyUpdate = async (): Promise<IPathfinderDoc[] | []> => Pathfinder.find({ isUpdate: true })
+
 export async function updatePathfinder(pathfinderBody: UpdatePathfinderBody, id: mongoose.Types.ObjectId) {
   const data = await getPathfinderById(id)
   if (!data) {
