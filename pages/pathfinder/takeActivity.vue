@@ -77,6 +77,9 @@ async function processActivity() {
     return alertError(error.value)
 
   tabActive.value = 0
+
+  Activities.value.push({ ...form, _id: data.value._id })
+
   form._id = undefined
   form.name = ''
   form.comment = ''
@@ -111,14 +114,35 @@ async function getActivityByMonth() {
   if (error.value)
     return alertError(error.value)
 
-  Activities.value = data.value
+  Activities.value = data.value || []
+}
+async function deleteActivity(_id) {
+  loading.process = true
+  loading.list = true
+  const { data, error } = await fetchMAHIRFULL('/api/activity/delete', {
+    method: 'POST',
+    server: false,
+    body: { _id },
+  })
+  loading.list = false
+  loading.process = false
+  if (error.value)
+    return alertError(error.value)
+
+  Activities.value = Activities.value.filter(rs => rs._id !== _id)
 }
 /* watch(form.date, async () => {
   await getActivityByMonth()
 }) */
+
 setDateCurrent()
-getTopPathfinder()
-getActivityByMonth()
+onMounted(() => {
+  nextTick(async () => {
+    await getTopPathfinder()
+    await getActivityByMonth()
+    //
+  })
+})
 </script>
 
 <template>
@@ -143,10 +167,19 @@ getActivityByMonth()
                            },
                            { key: 'type' },
                            { key: 'date' },
+                           { key: 'acc' },
 
                 ]" :rows="Activities"
               >
                 >
+                <template #date-data="{ row }">
+                  <dateMongo :date="row.date" />
+                </template>
+                <template #acc-data="{ row }">
+                  <UButton color="red" @click="deleteActivity(row._id)">
+                    <div i-carbon-trash-can />
+                  </UButton>
+                </template>
               </UTable>
 
               <!--  <div v-for="activity in Activities" :key="activity._id">
