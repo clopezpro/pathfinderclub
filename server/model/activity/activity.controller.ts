@@ -61,10 +61,7 @@ export async function takeActivity(e: H3Event) {
       }
     }
   }
-  throw createError({
-    statusCode: 201,
-    statusMessage: 'DATOS ACTUALIZADOS CON ÉXITO',
-  })
+  return { _id: activityId.toString() }
 }
 
 export async function getActivity(e: H3Event) {
@@ -172,4 +169,18 @@ export async function getActivityBodies(e: H3Event) {
   const { headers } = await readBody(e)
 
   return await getActivityBodyByHeaders(headers)
+}
+
+export async function deleteActivity(e: H3Event) {
+  const { _id } = await readBody(e)
+  const activity = await Activity.ActivityHeader.findById(_id)
+  if (!activity) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'ACTIVIDAD NO ENCONTRADA',
+    })
+  }
+  await Activity.ActivityBody.deleteMany({ activityHeaderId: activity._id })
+  await activity.deleteOne()
+  return setResponseStatus(e, 200, 'Actividad Eliminada con Éxito')
 }
