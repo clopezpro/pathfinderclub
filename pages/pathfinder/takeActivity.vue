@@ -1,4 +1,8 @@
 <script setup>
+definePageMeta({
+  title: 'Tomar Actividades',
+  middleware: ['authenticated'],
+})
 const alertError = useAlertErrorModal()
 const toast = useToast()
 
@@ -246,8 +250,9 @@ onMounted(() => {
                   </div>
                 </template>
                 <template #acc-data="{ index }">
-                  <div w-10>
-                    <UInput v-model="dataDB[index].grade" text-right :padded="false" size="sm" border :min="0" :max="form.topgrade" type="number" />
+                  <div w-12 flex gap-1>
+                    <UInput v-model="dataDB[index].grade" px-0.5 text-center :padded="false" size="sm" border :min="0" square :max="form.topgrade" type="number" />
+                    <UButton title="Colocar Nota Maxima" icon="i-carbon-face-satisfied-filled" size="xs" color="yellow" square variant="solid" :padded="false" @click="() => dataDB[index].grade = form.topgrade" />
                   </div>
                 </template>
               </UTable>

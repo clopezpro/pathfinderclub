@@ -2,7 +2,7 @@
 import { OnlyMonths } from '~/constants/lists'
 
 definePageMeta({
-  title: 'Lista Actividades',
+  title: 'Mostrar Actividades',
   middleware: ['authenticated'],
 })
 const columns = [{
