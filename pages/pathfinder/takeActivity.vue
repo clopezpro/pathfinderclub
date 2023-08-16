@@ -159,8 +159,8 @@ onMounted(() => {
       </template>
       <template #item="{ item }">
         <UCard>
-          <div v-if="item.key === 'activity'" class=" md:mx-auto  flex">
-            <div border border-gray-800 p-2 rounded-md>
+          <div v-if="item.key === 'activity'" class=" md:mx-auto  " grid="~ lg:cols-2  ">
+            <div border border-gray-800 p-2 rounded-md overflow-x-auto lg:order-first>
               <UTable
                 :columns="[{
                              key: 'name',
@@ -169,9 +169,14 @@ onMounted(() => {
                            { key: 'date' },
                            { key: 'acc' },
 
-                ]" :rows="Activities"
+                ]"
+                :rows="Activities"
+                :ui="{
+                  td: {
+                    padding: 'px-1 py-1',
+                  },
+                }"
               >
-                >
                 <template #date-data="{ row }">
                   <dateMongo :date="row.date" />
                 </template>
@@ -181,12 +186,8 @@ onMounted(() => {
                   </UButton>
                 </template>
               </UTable>
-
-              <!--  <div v-for="activity in Activities" :key="activity._id">
-                {{ activity.name }}
-              </div> -->
             </div>
-            <div class="border border-gray-800 p-2 rounded-md ">
+            <div class="border border-gray-800 p-2 rounded-md order-first">
               <div class="text-primary-500 text-center">
                 Tomar Actividad
               </div>
@@ -232,7 +233,13 @@ onMounted(() => {
               <UButton :loading="loading.process" type="button" label="GUARDAR NOTAS" color="primary" variant="solid" @click="processActivity" />
             </div>
             <div class="overflow-x-auto">
-              <UTable :columns="columns" :rows="dataDB">
+              <UTable
+                :columns="columns" :rows="dataDB" :ui="{
+                  td: {
+                    padding: 'px-1 py-2',
+                  },
+                }"
+              >
                 <template #id-data="{ index }">
                   <div>
                     {{ index + 1 }}

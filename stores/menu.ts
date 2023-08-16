@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useMediaQuery } from '@vueuse/core'
 import type { IModule } from '@/types'
 import { MODULE_LIST } from '~/constants/lists'
 
@@ -45,6 +46,9 @@ export const useMenuStore = defineStore('useMenuStore', () => {
       }
       // set default selected menu by path in route currentPath
     }
+    const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+    if (!isLargeScreen.value)
+      minimized.value = true
   }
   setDefaultMenu()
   const openAndCloseMenu = () => {
@@ -52,9 +56,8 @@ export const useMenuStore = defineStore('useMenuStore', () => {
     if (showMenu.value && minimized.value)
       minimized.value = false
   }
-  const closeMenu=()=>{
-
-      showMenu.value = false
+  const closeMenu = () => {
+    showMenu.value = false
   }
   const getMenuActive = () => {
     return menu.value.find(menu => menu.selected)
